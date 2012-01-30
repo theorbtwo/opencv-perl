@@ -1,7 +1,7 @@
 package OpenCV;
-use warnings;
-use strict;
+use strictures 1;
 use 5.10.0;
+use OpenCV::Vector::Rect;
 
 our $VERSION = '0.001';
 
