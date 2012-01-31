@@ -5,6 +5,9 @@ use autodie;
 use 5.10.0;
 
 use OpenCV;
+use Imager;
+
+my $in_fn = shift;
 
 my $face_cascade = OpenCV::CascadeClassifier->new();
 say "The cascadeclassifier: ", $face_cascade;
@@ -12,7 +15,7 @@ say "The cascadeclassifier: ", $face_cascade;
 my $ret = $face_cascade->load('/usr/src/autotagger/OpenCV/haarcascade_frontalface_alt.xml');
 say "Loading the face cascade returned $ret";
 
-my $mat = OpenCV::imread(shift);
+my $mat = OpenCV::imread($in_fn);
 say "Got back a mat from imread: $mat";
 
 my $channels = $mat->channels;
@@ -34,6 +37,8 @@ print "Done!\n";
 
 say "Number of returned objects: ", $vec->size;
 
+my $imager = Imager->new(file => $in_fn) or die Imager->errstr();
+
 for my $i (0..$vec->size-1) {
   my $rect = $vec->at($i);
   say "Rectangle at index $i: ", $rect;
@@ -42,4 +47,23 @@ for my $i (0..$vec->size-1) {
   say " width: ", $rect->width;
   say " height: ", $rect->height;
 
+  $imager->box(color => 'black',
+               xmin => $rect->x,
+               ymin => $rect->y,
+               xmax => $rect->x + $rect->width,
+               ymax => $rect->y + $rect->height) or die $imager->errstr;
+
+  $imager->box(color => 'white',
+               xmin => $rect->x-1,
+               ymin => $rect->y-1,
+               xmax => $rect->x + $rect->width+2,
+               ymax => $rect->y + $rect->height+2) or die $imager->errstr;
+
+  $imager->box(color => 'black',
+               xmin => $rect->x-2,
+               ymin => $rect->y-2,
+               xmax => $rect->x + $rect->width+4,
+               ymax => $rect->y + $rect->height+4) or die $imager->errstr;
 }
+
+$imager->write(file => "out.jpg") or die $imager->errstr;
