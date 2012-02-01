@@ -11,3 +11,4 @@ OpenCV.c
 OpenCV.xsc
 OpenCV.xsi
 typemap.dynamic
+opencv_cv.h
