@@ -10,11 +10,7 @@ extern "C" {
 }
 
 #include "opencv_cv.h"
-#include <cxtypes.h>
-#include <cxcore.h>
-#include <cv.hpp>
 #include <highgui.h>
-#include <highgui.hpp>
 #undef cv
 
 #define cv perl_cv
